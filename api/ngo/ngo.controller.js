@@ -1,6 +1,6 @@
 const {sign} = require("jsonwebtoken");
 
-const {getNgoByNgoEmail,addVolunteer,viewVolunteer,checkRepeatAadharVounteer,checkRepeatEmailVounteer,checkRepeatMobileVounteer,updatevolunteerDetails,addNewReward,checkForRepeatRewardTag,checkForRepeatRewardDesc,checkForRepeatRewardMinPoint} = require("./ngo.service");
+const {getNgoByNgoEmail,addVolunteer,viewVolunteer,checkRepeatAadharVounteer,checkRepeatEmailVounteer,checkRepeatMobileVounteer,updatevolunteerDetails,addNewReward,checkForRepeatRewardTag,checkForRepeatRewardDesc,checkForRepeatRewardMinPoint,getFeed} = require("./ngo.service");
 
 module.exports = {
     login: (req,res)=>{
@@ -248,9 +248,6 @@ module.exports = {
                                 });
                             }
                             else{
-
-                                //body["Hello"] = "Hii";
-
                                 addNewReward(body,(error,result)=>{
                                     if(error){
                                         console.log(error);
@@ -273,5 +270,22 @@ module.exports = {
             }
             
         });
+    },
+    getAllFeed:(req,res)=>{
+        getFeed((error,result)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    message : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : result
+                });
+            }
+        })
     },
 };

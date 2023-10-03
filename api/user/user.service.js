@@ -222,4 +222,69 @@ module.exports = {
         }
         );
     },
+    assignRequest:(data,callback)=>{
+        db.query("INSERT INTO Request (ApproxWeight, TimeStamp, Status, VolunteerGroupID, Type, NgoID, UserID, Latitude, Longitude, ActualWeight, PickUpDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",[
+            data.ApproxWeight,
+            data.TimeStamp,
+            "Assigned",
+            data.VolunteerGroupID,
+            data.Type,
+            data.NgoID,
+            data.UserID,
+            data.Lat,
+            data.Lon,
+            NULL,
+            data.PickupDate
+        ],(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    },
+    getFeed:(callback)=>{
+        db.query("select * from Feed where FeedEnable=1;",(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    },
+    getReward:(data,callback)=>{
+        db.query("select * from User_Credit where UserID=?;",[
+            data.UserID
+        ],(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    },
+    saveUserPic:(data,callback)=>{
+        db.query("INSERT INTO User_Profile_Pic (UserID, UserPic) VALUES (?, ?);",[
+            data.UserID,
+            data.UserPic
+        ],(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    },
+    updatePic:(data,callback)=>{
+        db.query("UPDATE User_Profile_Pic SET UserPic = ? WHERE UserID = ?;",[
+            data.UserPic,
+            data.UserID
+        ],(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    }
 };

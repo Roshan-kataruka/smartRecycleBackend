@@ -236,7 +236,7 @@ module.exports = {
             }
         });
     },
-    getVolunteerGroupLatLon : (callback=>{
+    getVolunteerGroupLatLon : (callback)=>{
         db.query("select Latitude,Longitude from Volunteer_Group;",(error,results)=>{
             if(error)
             {
@@ -246,5 +246,16 @@ module.exports = {
                 return callback(null,results);
             }
         })
-    })
+    },
+    getFeed:(callback)=>{
+        db.query("select * from Feed;",(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    }
 };

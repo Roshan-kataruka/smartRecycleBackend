@@ -4,7 +4,7 @@ const {convertToLonLatFormat} = require("../../function/formatterFunction")
 
 const {getRoutingData} = require("../../function/geoApifyFunction")
 
-const {create,getUser,getUserByUserEmail,updateUser,checkUserRepeatAadhar,checkUserRepeatMobile,getNumberOfUser,getLatLon,checkUserEmailPass,getUserDetailsByEmail} = require("./user.service");
+const {create,getUser,getUserByUserEmail,updateUser,checkUserRepeatAadhar,checkUserRepeatMobile,getNumberOfUser,getLatLon,checkUserEmailPass,getUserDetailsByEmail,assignRequest,getFeed,getReward,saveUserPic,updatePic} = require("./user.service");
 
 const {sign} = require("jsonwebtoken");
 
@@ -230,7 +230,7 @@ module.exports = {
         });
     },
     assignVolunteer :(req,res)=>{
-        const body = req.body;
+        let body = req.body;
         const userLat = body.Lat;
         const userLon = body.Lon;
         let minDistance = 9007199254740;
@@ -283,21 +283,101 @@ module.exports = {
                   findNearestGroup()
                     .then((response) => {
                       if (response.minDistance !== 9007199254740) {
-                        return res.status(200).json({
-                            status : 1,
-                            groupId : response.tempGID
-                        });
-                      } else {
-                        return res.status(500).json({
-                            status : 0,
-                            message : "No eligible group found."
-                        });
-                      }
-                    })
-                    .catch((error) => {
-                      console.error(error);
-                    });
+                            body["VolunteerGroupID"] = response.tempGID;
+                            assignRequest(body,(error,result)=>{
+                                if(error){
+                                    console.log(error);
+                                    return res.status(500).json({
+                                        status : 0,
+                                        message : "Database Connection Error"
+                                    });
+                                }
+                                else{
+                                    return res.status(200).json({
+                                        status : 1,
+                                        message : result
+                                    });
+                                }
+                            })
+                            } else {
+                                return res.status(500).json({
+                                    status : 0,
+                                    message : "No eligible group found."
+                                });
+                            }
+                            })
+                            .catch((error) => {
+                            console.error(error);
+                            });
             }
         })
     },
+    getAllFeed:(req,res)=>{
+        getFeed((error,results)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    message : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : results
+                });
+            }
+        })
+    },
+    getUserReward:(req,res)=>{
+        getReward((error,results)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    message : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : results
+                });
+            }
+        })
+    },
+    saveUserProfilePic:(req,res)=>{
+        saveUserPic(req.body,(error,result)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    message : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : results
+                });
+            }
+        })
+    },
+    updateProfilePic:(req,res)=>{
+        updatePic(req.body,(error,result)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    message : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : results
+                });
+            }
+        })
+    }
 };
