@@ -4,7 +4,7 @@ const db = require('../../config/database');
 module.exports = {
     create : (data,callback)=>{
         db.beginTransaction();           
-        db.query("INSERT INTO `User` (`FirstName`, `MiddleName`, `LastName`, `State`, `City`, `Pin`, `Landmark`, `AadharNo`,`MobileNumber`, `LoginID`, `RewardID`,`Gender`, `Dob`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);",
+        db.query("INSERT INTO `User` (`FirstName`, `MiddleName`, `LastName`, `State`, `City`, `Pin`, `Landmark`, `AadharNo`,`MobileNumber`,`Gender`, `Dob`) VALUES (?,?,?,?,?,?,?,?,?,?,?);",
         [
             data.FirstName,
             data.MiddleName,
@@ -15,8 +15,6 @@ module.exports = {
             data.Landmark,
             data.AadharNo,
             data.MobileNumber,
-            data.LoginID,
-            data.RewardID,
             data.Gender,
             data.Dob
         ],
@@ -113,7 +111,7 @@ module.exports = {
             data.MobileNumber,
             data.Gender,
             data.Dob,
-            data.ID
+            data.UserID
         ],(error,results)=>
         {
             if(error)
@@ -125,7 +123,7 @@ module.exports = {
                 db.query("UPDATE User_Login SET LoginPass = ?, LoginEmail = ? WHERE UserID = ?;",[
                     data.Email,
                     data.Pass,
-                    data.ID
+                    data.UserID
                 ],(error,results)=>{
                     if(error)
                     {
@@ -134,7 +132,7 @@ module.exports = {
                     }
                     else{
                         db.commit();
-                        return callback(null,results[0]);
+                        return callback(null,results);
                     }
                 })
             }
@@ -197,11 +195,12 @@ module.exports = {
         })
     },
     checkUserEmailPass:(data,callback)=>{
-        db.query(`select count(*) as c,LoginEmail,LoginPass from User_Login where LoginEmail = ? and LoginPass= ?`,
+        db.query("select count(*) as c,LoginEmail,LoginPass,UserID from User_Login where LoginEmail = ? and LoginPass= ?;",
         [data.LoginEmail,
         data.LoginPass
         ],
         (error,results)=>{
+            //console.log(results);
             if(error)
             {
                 callback(error);
@@ -210,7 +209,7 @@ module.exports = {
         }
         );
     },
-    getUserDetailsByEmail:(data,callback)=>{
+    getUserDetailsByID:(data,callback)=>{
         db.query(`select * from User where UserID=?`,
         [data],
         (error,results)=>{
@@ -222,22 +221,36 @@ module.exports = {
         }
         );
     },
+    getUserDetailsOfEmailByID:(data,callback)=>{
+        db.query(`select * from User_Login where UserID=?`,
+        [data],
+        (error,results)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,results);
+        }
+        );
+    },
     assignRequest:(data,callback)=>{
-        db.query("INSERT INTO Request (ApproxWeight, TimeStamp, Status, VolunteerGroupID, Type, NgoID, UserID, Latitude, Longitude, ActualWeight, PickUpDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",[
+        //console.log(data.VolunteerGroupID);
+        data["Status"]="Assigned";
+        db.query("INSERT INTO Request (ApproxWeight, TimeStamp, Status, VolunteerGroupID, Type, UserID, Latitude, Longitude, PickUpDate) VALUES (?, ?, ?, ?, ?, ?, ?,?, ?);",[
             data.ApproxWeight,
             data.TimeStamp,
-            "Assigned",
+            data.Status,
             data.VolunteerGroupID,
             data.Type,
-            data.NgoID,
             data.UserID,
             data.Lat,
             data.Lon,
-            NULL,
-            data.PickupDate
+            data.PickUpDate
         ],(error,result)=>{
+            //console.log(result);
             if(error)
             {
+                console.log("hello 1234 ");
                 callback(error);
             }
             return callback(null,result);
@@ -253,9 +266,10 @@ module.exports = {
         })
     },
     getReward:(data,callback)=>{
-        db.query("select * from User_Credit where UserID=?;",[
+        db.query("select CreditValue from User_Credit where UserID=?;",[
             data.UserID
         ],(error,result)=>{
+            //console.log(result);
             if(error)
             {
                 callback(error);

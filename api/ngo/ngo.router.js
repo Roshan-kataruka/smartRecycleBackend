@@ -10,7 +10,7 @@ router.post("/",checktoken,addNewVolunteer);
 
 router.get("/",checktoken,listVolunteer);
 
-router.patch("/",checktoken,updateExistingVolunteer)
+router.patch("/",checktoken,updateExistingVolunteer);
 
 router.post("/reward",addReward);
 

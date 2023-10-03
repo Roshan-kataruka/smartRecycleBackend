@@ -4,23 +4,23 @@ const router = require("express").Router();
 
 const {checktoken} = require("../../auth/token_validation");
 
-router.post("/",createUser); //done
+router.post("/",createUser); //done Complete
 
-router.get("/",checktoken,getUser); //done
+router.get("/",checktoken,getUser); //done Complete
 
-router.post("/login",login); //done
+router.post("/login",login); //done Complete
 
-router.patch("/",checktoken,updateUserDetails);
+router.patch("/",checktoken,updateUserDetails); // Complete
 
-router.get("/num/user",checktoken,totalNumberOfUser) // done
+router.get("/num/user",checktoken,totalNumberOfUser) // done Complete
 
-router.post("/request",checktoken,assignVolunteer); 
+router.post("/request",checktoken,assignVolunteer);  // COMPLETE
 
-router.get("/feed",checktoken,getAllFeed);
+router.get("/feed",checktoken,getAllFeed);  //Complete
 
-router.get("/reward",checktoken,getUserReward);
+router.get("/reward",checktoken,getUserReward); // Complete
 
-router.post("/picture",checktoken,saveUserProfilePic)
+router.post("/picture",checktoken,saveUserProfilePic) 
 
 router.patch("/picture",checktoken,updateProfilePic);
 

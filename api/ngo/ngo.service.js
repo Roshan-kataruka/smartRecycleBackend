@@ -3,11 +3,12 @@ const db = require('../../config/database');
 
 module.exports = {
     getNgoByNgoEmail:(data,callback)=>{
-        db.query(`select * from Ngo_Login where NgoEmail = ? and NgoPass=?`,
+        db.query(`select *,Count(*) as c from Ngo_Login where NgoEmail = ? and NgoPass=?`,
         [data.NgoEmail,
         data.NgoPass
         ],
         (error,results)=>{
+            //console.log(results);
             if(error)
             {
                 callback(error);

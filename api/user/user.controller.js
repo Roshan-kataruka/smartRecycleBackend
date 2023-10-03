@@ -4,7 +4,7 @@ const {convertToLonLatFormat} = require("../../function/formatterFunction")
 
 const {getRoutingData} = require("../../function/geoApifyFunction")
 
-const {create,getUser,getUserByUserEmail,updateUser,checkUserRepeatAadhar,checkUserRepeatMobile,getNumberOfUser,getLatLon,checkUserEmailPass,getUserDetailsByEmail,assignRequest,getFeed,getReward,saveUserPic,updatePic} = require("./user.service");
+const {create,getUser,getUserByUserEmail,updateUser,checkUserRepeatAadhar,checkUserRepeatMobile,getNumberOfUser,getLatLon,checkUserEmailPass,getUserDetailsByID,assignRequest,getFeed,getReward,saveUserPic,updatePic,getUserDetailsOfEmailByID} = require("./user.service");
 
 const {sign} = require("jsonwebtoken");
 
@@ -82,9 +82,8 @@ module.exports = {
             
         });
     },
-
     getUser : (req,res)=>{
-        getUserDetailsByEmail(req.body.UserID,(error,result)=>{
+        getUserDetailsByID(req.body.UserID,(error,response)=>{
             if(error)
             {
                 console.log(error);
@@ -94,10 +93,22 @@ module.exports = {
                 });
             }
             else{
-                    return res.status(200).json({
-                        status : 1,
-                        message : result
-                    });
+                    getUserDetailsOfEmailByID(req.body.UserID,(error,result)=>{
+                        if(error){
+                            console.log(error);
+                            return res.status(500).json({
+                                status : 0,
+                                message : "Database Connection Error"
+                            });
+                        }
+                        else{
+                            return res.status(200).json({
+                                status : 1,
+                                message : result,
+                                message1 : response
+                            });
+                        }
+                    })
                 }
         });
     },
@@ -119,7 +130,7 @@ module.exports = {
             }
             if(result[0].c==1)
             {
-                result.LoginPass=undefined;
+                result[0].LoginPass=undefined;
                 const jsontoken = sign({results: result},"qs45dex",
                 {expiresIn: "1h"
 
@@ -127,7 +138,8 @@ module.exports = {
                 return res.json({
                     success:1,
                     message:"Login Successfully",
-                    token: jsontoken
+                    token: jsontoken,
+                    UserID: result[0].UserID
                 })
             }
             else{
@@ -148,7 +160,7 @@ module.exports = {
                     message : "Database Connection Error"
                 });
             }
-            else if(result.c>=1)
+            else if(result[0].c>=1)
             {
                 return res.status(500).json({
                     status : 0,
@@ -164,7 +176,7 @@ module.exports = {
                             message : "Database Connection Error"
                         });
                     }
-                    else if(result.c>=1)
+                    else if(result[0].c>=1)
                     {
                         return res.status(500).json({
                             status : 0,
@@ -180,7 +192,7 @@ module.exports = {
                                     message : "Database Connection Error"
                                 });
                             }
-                            else if(result.c>=1)
+                            else if(result[0].c>=1)
                             {
                                 return res.status(500).json({
                                     status : 0,
@@ -231,13 +243,13 @@ module.exports = {
     },
     assignVolunteer :(req,res)=>{
         let body = req.body;
-        const userLat = body.Lat;
-        const userLon = body.Lon;
+        let userLat = body.Lat;
+        let userLon = body.Lon;
         let minDistance = 9007199254740;
         let tempGID = null;
         getLatLon((error,results)=>{
             if(error){
-                console.log(error);
+                //console.log(error);
                 return res.status(500).json({
                     status : 0,
                     message : "Database Connection Error"
@@ -254,13 +266,15 @@ module.exports = {
                       const groupID = results[i].GID;
                   
                       const formattedDistance = convertToLonLatFormat(userLat, userLon, volLat, volLon);
-                  
+                        //console.log(formattedDistance);
                       try {
                         const result = await getRoutingData(formattedDistance);
                   
                         //console.log('API Result:', result);
                   
                         let temp = result / 1000;
+
+                        //console.log(temp);
                         
                   
                         if (temp <= volAreaCovered && temp < minDistance) {
@@ -283,10 +297,12 @@ module.exports = {
                   findNearestGroup()
                     .then((response) => {
                       if (response.minDistance !== 9007199254740) {
+                            //console.log("Hello "+ response.tempGID);
                             body["VolunteerGroupID"] = response.tempGID;
+                            //console.log(body.VolunteerGroupID);
                             assignRequest(body,(error,result)=>{
                                 if(error){
-                                    console.log(error);
+                                    //console.log(error);
                                     return res.status(500).json({
                                         status : 0,
                                         message : "Database Connection Error"
@@ -330,7 +346,7 @@ module.exports = {
         })
     },
     getUserReward:(req,res)=>{
-        getReward((error,results)=>{
+        getReward(req.body,(error,results)=>{
             if(error){
                 console.log(error);
                 return res.status(500).json({

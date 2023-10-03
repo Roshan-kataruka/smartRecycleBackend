@@ -16,6 +16,7 @@ async function getRoutingData(waypoints) {
     });
 
     const result = response.data;
+    //console.log(result.features[0].properties.legs[0].distance);
     return result.features[0].properties.legs[0].distance;
   } catch (error) {
     

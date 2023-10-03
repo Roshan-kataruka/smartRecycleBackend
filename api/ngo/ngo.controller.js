@@ -11,23 +11,24 @@ module.exports = {
             {
                 console.log(err);
             }
-            console.log(result);
-            if(!result)
+            //console.log(result);
+            if(result[0].c==0)
             {
                 return res.json({
                     success:0,
                     data: "Invalid username or password"
                 });
             }
-            if(result.NgoEmail===body.NgoEmail && result.NgoPass===body.NgoPass)
+            if(result[0].NgoEmail===body.NgoEmail && result[0].NgoPass===body.NgoPass)
             {
                 result.NgoEmail=undefined;
                 const jsontoken = sign({results: result},"qs45dex",
-                {expiresIn: "1h" });
+                {expiresIn: "30D" });
                 return res.json({
                     success:1,
                     message:"Login Successfully",
-                    token: jsontoken
+                    token: jsontoken,
+                    NgoID: result[0].NgoID
                 })
             }
             else{
