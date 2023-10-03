@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const {login,addNewVolunteer,listVolunteer,updateExistingVolunteer,addReward,getAllFeed} = require("./ngo.controller");
+const {login,addNewVolunteer,listVolunteer,updateExistingVolunteer,addReward,getAllFeed,addFeed} = require("./ngo.controller");
 
 const {checktoken} = require("../../auth/token_validation");
 
@@ -14,7 +14,7 @@ router.patch("/",checktoken,updateExistingVolunteer)
 
 router.post("/reward",addReward);
 
-router.post("/feed",addFeed); //update feed 
+//router.post("/feed",addFeed); //update feed 
 
 router.get("/feed",getAllFeed);//view all Request
 //Notification 
