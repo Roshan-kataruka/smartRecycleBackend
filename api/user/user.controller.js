@@ -4,7 +4,7 @@ const {convertToLonLatFormat} = require("../../function/formatterFunction")
 
 const {getRoutingData} = require("../../function/geoApifyFunction")
 
-const {create,getUser,getUserByUserEmail,updateUser,checkUserRepeatAadhar,checkUserRepeatMobile,getNumberOfUser,getLatLon,checkUserEmailPass,getUserDetailsByID,assignRequest,getFeed,getReward,saveUserPic,updatePic,getUserDetailsOfEmailByID} = require("./user.service");
+const {create,getUser,getUserByUserEmail,updateUser,checkUserRepeatAadhar,checkUserRepeatMobile,getNumberOfUser,getLatLon,checkUserEmailPass,getUserDetailsByID,assignRequest,getFeed,getReward,saveUserPic,updatePic,getUserDetailsOfEmailByID,updateUserDetailsEmail,updateUserMobile,getUserRewardPointTable} = require("./user.service");
 
 const {sign} = require("jsonwebtoken");
 
@@ -132,7 +132,7 @@ module.exports = {
             {
                 result[0].LoginPass=undefined;
                 const jsontoken = sign({results: result},"qs45dex",
-                {expiresIn: "1h"
+                {expiresIn: "30d"
 
                 });
                 return res.json({
@@ -150,9 +150,66 @@ module.exports = {
             }
         })
     },
-    updateUserDetails : (req,res) =>{
+    updateUserDetailsBasic : (req,res) =>{
+        const body = req.body;
+        updateUser(body,(error,result)=>{
+            if(error){
+                //console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    message : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : result
+                });
+            }
+        })
+    },
+    updateUserMobileNo:(req,res)=>{
+        const body = req.body;
+        checkUserRepeatMobile(body,(error,result)=>{
+            if(error)
+            {
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    message : "Database Connection Error"
+                });
+            }
+            else if(result.c==1)
+            {
+                return res.status(500).json({
+                    status : 0,
+                    message : "Mobile Number Already Exists"
+                });
+            }
+            else{
+                updateUserMobile(body,(error,result)=>{
+                    if(error)
+                    {
+                        console.log(error);
+                        return res.status(500).json({
+                            status : 0,
+                            message : "Database Connection Error"
+                        });
+                    }
+                    else{
+                        return res.status(200).json({
+                            status : 1,
+                            message : result
+                        });
+                    }
+                })
+            }
+        })
+    },
+    updateUserEmail:(req,res)=>{
         const body = req.body;
         getUserByUserEmail(body.Email,(error,result)=>{
+            //console.log(result)
             if(error){
                 console.log(error);
                 return res.status(500).json({
@@ -160,7 +217,7 @@ module.exports = {
                     message : "Database Connection Error"
                 });
             }
-            else if(result[0].c>=1)
+            else if(result.c==1)
             {
                 return res.status(500).json({
                     status : 0,
@@ -168,60 +225,24 @@ module.exports = {
                 });
             }
             else{
-                checkUserRepeatAadhar(body.AadharNo,(error,result)=>{
-                    if(error){
+                updateUserDetailsEmail(body,(error,result)=>{
+                    if(error)
+                    {
                         console.log(error);
                         return res.status(500).json({
                             status : 0,
                             message : "Database Connection Error"
                         });
                     }
-                    else if(result[0].c>=1)
-                    {
-                        return res.status(500).json({
-                            status : 0,
-                            message : "Aadhar Already Exists"
-                        });
-                    }
                     else{
-                        checkUserRepeatMobile(body.MobileNumber,(error,result)=>{
-                            if(error){
-                                console.log(error);
-                                return res.status(500).json({
-                                    status : 0,
-                                    message : "Database Connection Error"
-                                });
-                            }
-                            else if(result[0].c>=1)
-                            {
-                                return res.status(500).json({
-                                    status : 0,
-                                    message : "Mobile Already Exists"
-                                });
-                            }
-                            else{
-                                updateUser(body,(error,result)=>{
-                                    if(error){
-                                        console.log(error);
-                                        return res.status(500).json({
-                                            status : 0,
-                                            message : "Database Connection Error"
-                                        });
-                                    }
-                                    else{
-                                        return res.status(200).json({
-                                            status : 1,
-                                            message : result
-                                        });
-                                    }
-                                })
-                            }
-                        })
+                        return res.status(200).json({
+                            status : 1,
+                            message : result
+                        });
                     }
                 })
             }
-            
-        });
+        })
     },
     totalNumberOfUser : (req,res)=>{
         getNumberOfUser((error,result)=>{
@@ -395,5 +416,50 @@ module.exports = {
                 });
             }
         })
-    }
+    },
+    getUserRewardIcon:(req,res)=>{
+        let body=req.body;
+        getReward(body,(error,result)=>{
+            if(error)
+            {
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    message : "Database Connection Error"
+                });
+            }
+            else{
+                let reward1 = result[0].CreditValue;
+                body["UserRewardPoint"] = reward1;
+                getUserRewardPointTable(body,(error,result)=>{
+                    if(error){
+                        console.log(error);
+                        return res.status(500).json({
+                            status : 0,
+                            message : "Database Connection Error"
+                        });
+                    }
+                    else{
+                        if(result[0]==undefined)
+                        {
+                            return res.status(200).json({
+                                status : 1,
+                                message : "Not Eligible For Icon"
+                            });
+                        }
+                        else{
+                            return res.status(200).json({
+                                status : 1,
+                                message : result
+                            });
+                        }
+                    }
+                })
+            }
+            /*return res.status(200).json({
+                status : 1,
+                message : result
+            });*/
+        })
+    },
 };

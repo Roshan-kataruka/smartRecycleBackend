@@ -96,9 +96,44 @@ module.exports = {
         }
         );
     },
+    updateUserDetailsEmail:(data,callback)=>{
+        db.query("UPDATE User_Login SET LoginEmail = ? WHERE UserID = ?;",[
+            data.Email,
+            data.UserID
+        ],(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    },
+    updateUserAadhar:(data,callback)=>{
+        db.query("UPDATE User SET AadharNo = ? WHERE UserID = ?;",[
+            data.AadharNo,
+            data.UserID
+        ],(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    },
+    updateUserMobile:(data,callback)=>{
+        db.query("UPDATE User SET MobileNumber = ? WHERE UserID = ?;",[
+            data.MobileNumber,
+            data.UserID
+        ],(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    },
     updateUser:(data,callback)=>{
-       db.beginTransaction()
-        db.query("UPDATE User SET FirstName = ?, MiddleName = ?, LastName = ?, State = ?, City = ?, Pin = ?, Landmark = ?, AadharNo = ?, MobileNumber = ?,Gender = ?, Dob = ? WHERE UserID = ?;",[
+        db.query("UPDATE User SET FirstName = ?, MiddleName = ?, LastName = ?, State = ?, City = ?, Pin = ?, Landmark = ?,Gender = ?, Dob = ? WHERE UserID = ?;",[
             data.FirstName,
             data.MiddleName,
             data.LastName,
@@ -106,42 +141,25 @@ module.exports = {
             data.City,
             data.Pin,
             data.Landmark,
-            data.Landmark,
-            data.AadharNo,
-            data.MobileNumber,
             data.Gender,
             data.Dob,
             data.UserID
         ],(error,results)=>
         {
+            console.log(results);
             if(error)
             {
-                db.rollback();
                 callback(error);
             }
             else{
-                db.query("UPDATE User_Login SET LoginPass = ?, LoginEmail = ? WHERE UserID = ?;",[
-                    data.Email,
-                    data.Pass,
-                    data.UserID
-                ],(error,results)=>{
-                    if(error)
-                    {
-                        db.rollback();
-                        callback(error);
-                    }
-                    else{
-                        db.commit();
-                        return callback(null,results);
-                    }
+                    return callback(null,results);
+                }
                 })
-            }
-        })
     },
     checkUserRepeatMobile: (body,callback)=>{
         db.query("select count(*) as c from User where MobileNumber=?",
             [
-                body
+                body.MobileNumber
             ],
             (error,results)=>
             {
@@ -281,6 +299,17 @@ module.exports = {
         db.query("INSERT INTO User_Profile_Pic (UserID, UserPic) VALUES (?, ?);",[
             data.UserID,
             data.UserPic
+        ],(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    },
+    getUserRewardPointTable:(data,callback)=>{
+        db.query("select RewardTag, Description, RewardIcon from Reward where MinPoints<=? order by MinPoints desc limit 1;",[
+            data.UserRewardPoint
         ],(error,result)=>{
             if(error)
             {

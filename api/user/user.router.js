@@ -1,4 +1,4 @@
-const {createUser,getUser,login,updateUserDetails,totalNumberOfUser,assignVolunteer,getAllFeed,getUserReward,saveUserProfilePic,updateProfilePic} = require("./user.controller");
+const {createUser,getUser,login,updateUserDetailsBasic,totalNumberOfUser,assignVolunteer,getAllFeed,getUserReward,saveUserProfilePic,updateProfilePic,updateUserEmail,updateUserMobileNo,getUserRewardIcon} = require("./user.controller");
 
 const router = require("express").Router();
 
@@ -10,7 +10,11 @@ router.get("/",checktoken,getUser); //done Complete
 
 router.post("/login",login); //done Complete
 
-router.patch("/",checktoken,updateUserDetails); // Complete
+router.patch("/",checktoken,updateUserDetailsBasic); // Complete 
+
+router.patch("/email",updateUserEmail); // Complete
+
+router.patch("/mobno",updateUserMobileNo); // Complete
 
 router.get("/num/user",checktoken,totalNumberOfUser) // done Complete
 
@@ -20,8 +24,10 @@ router.get("/feed",checktoken,getAllFeed);  //Complete
 
 router.get("/reward",checktoken,getUserReward); // Complete
 
-router.post("/picture",checktoken,saveUserProfilePic) 
+router.post("/picture",checktoken,saveUserProfilePic);
 
 router.patch("/picture",checktoken,updateProfilePic);
+
+router.get("/reward/icon",getUserRewardIcon);
 
 module.exports = router;
