@@ -11,11 +11,15 @@ const userRouter = require("./api/user/user.router");
 
 const ngoRouter = require("./api/ngo/ngo.router");
 
+const imageRouter = require("./api/ImageRecognition/imageRecogRouter")
+
 app.use(express.json());
 
 app.use("/api/users",userRouter);
 
-app.use("/api/ngo",ngoRouter)
+app.use("/api/ngo",ngoRouter);
+
+app.use("/image/api",imageRouter);
 
 
 
