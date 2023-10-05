@@ -104,8 +104,8 @@ module.exports = {
                         else{
                             return res.status(200).json({
                                 status : 1,
-                                message : result,
-                                message1 : response
+                                message : result[0],
+                                message1 : response[0]
                             });
                         }
                     })
