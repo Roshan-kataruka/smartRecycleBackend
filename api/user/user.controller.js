@@ -139,7 +139,6 @@ module.exports = {
                     success:1,
                     message:"Login Successfully",
                     token: jsontoken,
-                    UserID: result[0].UserID
                 })
             }
             else{

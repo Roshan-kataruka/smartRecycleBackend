@@ -15,8 +15,8 @@ module.exports = {
                 })
             }
             else{
-                //let data = decode.results[0].UserID;
-                //req.body["UserID"]=data
+                let data = decode.results[0].UserID;
+                req.body["UserID"]=data
                 //console.log(req.body.UserID);
                 next();
             }
