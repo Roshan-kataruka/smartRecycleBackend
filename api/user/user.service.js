@@ -193,23 +193,23 @@ module.exports = {
     getNumberOfUser:(callback)=>{
         db.query("select count(*) as c from User",(error,result)=>{
             if(error)
-                {
-                    return callback(error)
-                }
-                else{
-                    return callback(null,result);
-                }
+            {
+                return callback(error)
+            }
+            else{
+                return callback(null,result);
+            }
         })
     },
     getLatLon : (callback)=>{
         db.query("select Latitude, Longitude,AreaCovered,GID from Volunteer_Group",(error,result)=>{
             if(error)
-                {
-                    return callback(error)
-                }
-                else{
-                    return callback(null,result);
-                }
+            {
+                return callback(error)
+            }
+            else{
+                return callback(null,result);
+            }
         })
     },
     checkUserEmailPass:(data,callback)=>{

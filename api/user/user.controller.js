@@ -119,13 +119,17 @@ module.exports = {
             if(err)
             {
                 console.log(err);
+                return res.json({
+                    success:0,
+                    invalidResponseServer: "Database Error"
+                });
             }
             console.log(result);
             if(result[0].c==0)
             {
                 return res.json({
                     success:0,
-                    data: "Invalid username or password"
+                    invalidResponse: "Invalid username or password"
                 });
             }
             if(result[0].c==1)
@@ -145,7 +149,7 @@ module.exports = {
             else{
                 return res.json({
                     success:0,
-                    data: "Invalid username or password"
+                    invalidResponseServer: "Database Error"
                 });
             }
         })
@@ -163,7 +167,7 @@ module.exports = {
             else{
                 return res.status(200).json({
                     status : 1,
-                    message : result
+                    message : result.affectedRows
                 });
             }
         })
@@ -181,7 +185,7 @@ module.exports = {
             }
             else if(result.c==1)
             {
-                return res.status(500).json({
+                return res.status(409).json({
                     status : 0,
                     message : "Mobile Number Already Exists"
                 });
@@ -199,7 +203,7 @@ module.exports = {
                     else{
                         return res.status(200).json({
                             status : 1,
-                            message : result
+                            message : result.affectedRows
                         });
                     }
                 })
@@ -219,7 +223,7 @@ module.exports = {
             }
             else if(result.c==1)
             {
-                return res.status(500).json({
+                return res.status(409).json({
                     status : 0,
                     message : "Email Already Exists"
                 });
@@ -235,9 +239,10 @@ module.exports = {
                         });
                     }
                     else{
+                        console.log(result.affectedRows);
                         return res.status(200).json({
                             status : 1,
-                            message : result
+                            message : result.affectedRows
                         });
                     }
                 })
