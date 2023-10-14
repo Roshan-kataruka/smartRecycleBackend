@@ -4,7 +4,7 @@ const {convertToLonLatFormat} = require("../../function/formatterFunction")
 
 const {getRoutingData} = require("../../function/geoApifyFunction")
 
-const {create,getUser,getUserByUserEmail,updateUser,checkUserRepeatAadhar,checkUserRepeatMobile,getNumberOfUser,getLatLon,checkUserEmailPass,getUserDetailsByID,assignRequest,getFeed,getReward,saveUserPic,updatePic,getUserDetailsOfEmailByID,updateUserDetailsEmail,updateUserMobile,getUserRewardPointTable} = require("./user.service");
+const {create,getUserByUserEmail,updateUser,checkUserRepeatAadhar,checkUserRepeatMobile,getNumberOfUser,getLatLon,checkUserEmailPass,getUserDetailsByID,assignRequest,getFeed,getReward,saveUserPic,updatePic,getUserDetailsOfEmailByID,updateUserDetailsEmail,updateUserMobile,getUserRewardPointTable} = require("./user.service");
 
 const {sign} = require("jsonwebtoken");
 
@@ -16,14 +16,14 @@ module.exports = {
                 console.log(error);
                 return res.status(500).json({
                     status : 0,
-                    message : "Database Connection Error"
+                    invalidResponseServer: "Database Connection Error"
                 });
             }
             else if(result.c>=1)
             {
                 return res.status(500).json({
                     status : 0,
-                    message : "Email Already Exists"
+                    invalidResponse : "Email Already Exists"
                 });
             }
             else{
@@ -32,14 +32,14 @@ module.exports = {
                         console.log(error);
                         return res.status(500).json({
                             status : 0,
-                            message : "Database Connection Error"
+                            invalidResponseServer: "Database Connection Error"
                         });
                     }
                     else if(result.c>=1)
                     {
                         return res.status(500).json({
                             status : 0,
-                            message : "Aadhar Already Exists"
+                            invalidResponse : "Aadhar Already Exists"
                         });
                     }
                     else{
@@ -48,14 +48,14 @@ module.exports = {
                                 console.log(error);
                                 return res.status(500).json({
                                     status : 0,
-                                    message : "Database Connection Error"
+                                    invalidResponseServer: "Database Connection Error"
                                 });
                             }
                             else if(result.c>=1)
                             {
                                 return res.status(500).json({
                                     status : 0,
-                                    message : "Mobile Already Exists"
+                                    invalidResponse : "Mobile Already Exists"
                                 });
                             }
                             else{
@@ -64,7 +64,7 @@ module.exports = {
                                         console.log(error);
                                         return res.status(500).json({
                                             status : 0,
-                                            message : "Database Connection Error"
+                                            invalidResponseServer: "Database Connection Error"
                                         });
                                     }
                                     else{
@@ -89,7 +89,7 @@ module.exports = {
                 console.log(error);
                 return res.status(500).json({
                     status : 0,
-                    message : "Database Connection Error"
+                    invalidResponseServer : "Database Connection Error"
                 });
             }
             else{
@@ -98,7 +98,7 @@ module.exports = {
                             console.log(error);
                             return res.status(500).json({
                                 status : 0,
-                                message : "Database Connection Error"
+                                invalidResponseServer : "Database Connection Error"
                             });
                         }
                         else{
@@ -121,7 +121,7 @@ module.exports = {
                 console.log(err);
                 return res.json({
                     success:0,
-                    invalidResponseServer: "Database Error"
+                    invalidResponseServer: "Database Connection Error"
                 });
             }
             console.log(result);
@@ -149,7 +149,7 @@ module.exports = {
             else{
                 return res.json({
                     success:0,
-                    invalidResponseServer: "Database Error"
+                    invalidResponseServer: "Database Connection Error"
                 });
             }
         })
@@ -161,13 +161,13 @@ module.exports = {
                 //console.log(error);
                 return res.status(500).json({
                     status : 0,
-                    message : "Database Connection Error"
+                    invalidResponseServer : "Database Connection Error"
                 });
             }
             else{
                 return res.status(200).json({
                     status : 1,
-                    message : result.affectedRows
+                    message : result // check with rishi
                 });
             }
         })
@@ -180,14 +180,14 @@ module.exports = {
                 console.log(error);
                 return res.status(500).json({
                     status : 0,
-                    message : "Database Connection Error"
+                    invalidResponseServer : "Database Connection Error"
                 });
             }
             else if(result.c==1)
             {
                 return res.status(409).json({
                     status : 0,
-                    message : "Mobile Number Already Exists"
+                    invalidResponse : "Mobile Number Already Exists"
                 });
             }
             else{
@@ -197,13 +197,13 @@ module.exports = {
                         console.log(error);
                         return res.status(500).json({
                             status : 0,
-                            message : "Database Connection Error"
+                            invalidResponseServer : "Database Connection Error"
                         });
                     }
                     else{
                         return res.status(200).json({
                             status : 1,
-                            message : result.affectedRows
+                            message : result // check with Rishi
                         });
                     }
                 })
@@ -218,14 +218,14 @@ module.exports = {
                 console.log(error);
                 return res.status(500).json({
                     status : 0,
-                    message : "Database Connection Error"
+                    invalidResponseServer : "Database Connection Error"
                 });
             }
             else if(result.c==1)
             {
                 return res.status(409).json({
                     status : 0,
-                    message : "Email Already Exists"
+                    invalidResponse : "Email Already Exists"
                 });
             }
             else{
@@ -235,7 +235,7 @@ module.exports = {
                         console.log(error);
                         return res.status(500).json({
                             status : 0,
-                            message : "Database Connection Error"
+                            invalidResponseServer : "Database Connection Error"
                         });
                     }
                     else{
@@ -256,7 +256,7 @@ module.exports = {
                 console.log(error);
                 return res.status(500).json({
                     status : 0,
-                    message : "Database Connection Error"
+                    invalidResponseServer : "Database Connection Error"
                 });
             }
             else{
@@ -278,7 +278,7 @@ module.exports = {
                 //console.log(error);
                 return res.status(500).json({
                     status : 0,
-                    message : "Database Connection Error"
+                    invalidResponseServer : "Database Connection Error"
                 });
             }
             else{
@@ -331,7 +331,7 @@ module.exports = {
                                     //console.log(error);
                                     return res.status(500).json({
                                         status : 0,
-                                        message : "Database Connection Error"
+                                        invalidResponseServer : "Database Connection Error"
                                     });
                                 }
                                 else{
@@ -344,7 +344,7 @@ module.exports = {
                             } else {
                                 return res.status(500).json({
                                     status : 0,
-                                    message : "No eligible group found."
+                                    invalidResponse : "No eligible group found."
                                 });
                             }
                             })
@@ -360,7 +360,7 @@ module.exports = {
                 console.log(error);
                 return res.status(500).json({
                     status : 0,
-                    message : "Database Connection Error"
+                    invalidResponseServer : "Database Connection Error"
                 });
             }
             else{
@@ -377,7 +377,7 @@ module.exports = {
                 console.log(error);
                 return res.status(500).json({
                     status : 0,
-                    message : "Database Connection Error"
+                    invalidResponseServer : "Database Connection Error"
                 });
             }
             else{
@@ -394,13 +394,13 @@ module.exports = {
                 console.log(error);
                 return res.status(500).json({
                     status : 0,
-                    message : "Database Connection Error"
+                    invalidResponseServer : "Database Connection Error"
                 });
             }
             else{
                 return res.status(200).json({
                     status : 1,
-                    message : results
+                    message : result
                 });
             }
         })
@@ -411,13 +411,13 @@ module.exports = {
                 console.log(error);
                 return res.status(500).json({
                     status : 0,
-                    message : "Database Connection Error"
+                    invalidResponseServer : "Database Connection Error"
                 });
             }
             else{
                 return res.status(200).json({
                     status : 1,
-                    message : results
+                    message : result
                 });
             }
         })
@@ -430,7 +430,7 @@ module.exports = {
                 console.log(error);
                 return res.status(500).json({
                     status : 0,
-                    message : "Database Connection Error"
+                    invalidResponseServer : "Database Connection Error"
                 });
             }
             else{
@@ -441,7 +441,7 @@ module.exports = {
                         console.log(error);
                         return res.status(500).json({
                             status : 0,
-                            message : "Database Connection Error"
+                            invalidResponseServer : "Database Connection Error"
                         });
                     }
                     else{
@@ -449,7 +449,7 @@ module.exports = {
                         {
                             return res.status(200).json({
                                 status : 1,
-                                message : "Not Eligible For Icon"
+                                invalidResponse : "Not Eligible For Icon"
                             });
                         }
                         else{
