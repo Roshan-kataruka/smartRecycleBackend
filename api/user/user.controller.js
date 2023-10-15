@@ -383,7 +383,7 @@ module.exports = {
             else{
                 return res.status(200).json({
                     status : 1,
-                    message : results[0].CreditValue
+                    message : results[0].CreditValue// updated
                 });
             }
         })
