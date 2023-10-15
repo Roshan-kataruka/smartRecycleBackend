@@ -11,7 +11,7 @@ module.exports = {
             {
                 res.json({
                     status :0,
-                    message: "Invalid Token"
+                    LogoutResponse: "Invalid Token"
                 })
             }
             else{
@@ -25,7 +25,7 @@ module.exports = {
         else{
             res.json({
                 status :0,
-                message: "Access denied! unauthorized"
+                unauthResponse: "Access denied! unauthorized"
             });
         }
     }
