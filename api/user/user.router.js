@@ -16,13 +16,13 @@ router.patch("/email",checktoken,updateUserEmail); // Complete
 
 router.patch("/mobno",checktoken,updateUserMobileNo); // Complete
 
-router.get("/num/user",checktoken,totalNumberOfUser) // done Complete
+router.get("/num/user",checktoken,totalNumberOfUser) //done Complete
 
-router.post("/request",checktoken,assignVolunteer);  // COMPLETE
+router.post("/request",checktoken,assignVolunteer);  //COMPLETE
 
 router.get("/feed",checktoken,getAllFeed);  //Complete
 
-router.get("/reward",checktoken,getUserReward); // Complete
+router.get("/reward",checktoken,getUserReward); //Complete
 
 router.post("/picture",checktoken,saveUserProfilePic);
 
