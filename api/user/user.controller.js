@@ -167,7 +167,7 @@ module.exports = {
             else{
                 return res.status(200).json({
                     status : 1,
-                    message : result // check with rishi
+                    message : result.affectedRows
                 });
             }
         })
@@ -203,7 +203,7 @@ module.exports = {
                     else{
                         return res.status(200).json({
                             status : 1,
-                            message : result // check with Rishi
+                            message : result.affectedRows 
                         });
                     }
                 })
