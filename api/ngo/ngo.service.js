@@ -258,5 +258,49 @@ module.exports = {
                 return callback(null,result);
             }
         })
-    }
+    },
+    getAllUserRequestPending:(callback)=>{
+        db.query("select * from Request where Status=?;",
+        ["Assigned"],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    getAllUserRequestCompleted:(callback)=>{
+        db.query("select * from Request where Status=?;",[
+        "Completed"],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    setCompleteUserRequest:(data,callback)=>{
+        db.query("update Request set Status = ?, ActualWeight=? where RequestID=?;",
+        [
+            "Completed",
+            data.actualWeight,
+            data.RequestID
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+        //update Request set Status = "Completed", ActualWeight=100 where RequestID=2
+    },
 };

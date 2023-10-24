@@ -1,4 +1,4 @@
-const {createUser,getUser,login,updateUserDetailsBasic,totalNumberOfUser,assignVolunteer,getAllFeed,getUserReward,saveUserProfilePic,updateProfilePic,updateUserEmail,updateUserMobileNo,getUserRewardIcon} = require("./user.controller");
+const {createUser,getUser,login,updateUserDetailsBasic,totalNumberOfUser,assignVolunteer,getAllFeed,getUserReward,saveUserProfilePic,updateProfilePic,updateUserEmail,updateUserMobileNo,getUserRewardIcon,UserPendingCount,UserPendingRequest,UserCompletionCount,UserCompletionRequest} = require("./user.controller");
 
 const router = require("express").Router();
 
@@ -29,5 +29,13 @@ router.post("/picture",checktoken,saveUserProfilePic);
 router.patch("/picture",checktoken,updateProfilePic);
 
 router.get("/reward/icon",checktoken,getUserRewardIcon); //Complete
+
+router.get("/request/pending",checktoken,UserPendingCount);
+
+router.get("/request/pendingdetails",checktoken,UserPendingRequest);
+
+router.get("/request/completion",checktoken,UserCompletionCount);
+
+router.get("/request/completiondetails",checktoken,UserCompletionRequest);
 
 module.exports = router;

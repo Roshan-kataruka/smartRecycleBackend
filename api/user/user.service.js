@@ -329,5 +329,53 @@ module.exports = {
             }
             return callback(null,result);
         })
-    }
+    },
+    getUserPendingCount:(data,callback)=>{
+        db.query("select count(*) as 'c' from Request where Status=? and UserID=?;",[
+            "Assigned",
+            data.UserID
+        ],(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    },
+    getUserPendingRequest:(data,callback)=>{
+        db.query("select ApproxWeight,TimeStamp,Type,PickUpDate from Request where Status=? and UserID=?;",[
+            "Assigned",
+            data.UserID
+        ],(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    },
+    getUserCompletionCount:(data,callback)=>{
+        db.query("select count(*) as 'c' from Request where Status=? and UserID=?;",[
+            "Completed",
+            data.UserID
+        ],(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    },
+    getUserCompletionRequest:(data,callback)=>{
+        db.query("select ApproxWeight,TimeStamp,Type,PickUpDate,ActualWeight from Request where Status=? and UserID=?;",[
+            "Completed",
+            data.UserID
+        ],(error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            return callback(null,result);
+        })
+    },
 };

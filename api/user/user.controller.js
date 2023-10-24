@@ -4,7 +4,7 @@ const {convertToLonLatFormat} = require("../../function/formatterFunction")
 
 const {getRoutingData} = require("../../function/geoApifyFunction")
 
-const {create,getUserByUserEmail,updateUser,checkUserRepeatAadhar,checkUserRepeatMobile,getNumberOfUser,getLatLon,checkUserEmailPass,getUserDetailsByID,assignRequest,getFeed,getReward,saveUserPic,updatePic,getUserDetailsOfEmailByID,updateUserDetailsEmail,updateUserMobile,getUserRewardPointTable} = require("./user.service");
+const {create,getUserByUserEmail,updateUser,checkUserRepeatAadhar,checkUserRepeatMobile,getNumberOfUser,getLatLon,checkUserEmailPass,getUserDetailsByID,assignRequest,getFeed,getReward,saveUserPic,updatePic,getUserDetailsOfEmailByID,updateUserDetailsEmail,updateUserMobile,getUserRewardPointTable,getUserPendingCount,getUserPendingRequest,getUserCompletionCount,getUserCompletionRequest} = require("./user.service");
 
 const {sign} = require("jsonwebtoken");
 
@@ -466,5 +466,78 @@ module.exports = {
                 message : result
             });*/
         })
+    },
+    UserPendingCount : (req,res)=>{
+        getUserPendingCount(req.body,(error,result)=>{
+            if(error)
+            {
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : result[0].c
+                });
+            }
+        });
+    },
+    UserPendingRequest : (req,res)=>{
+        getUserPendingRequest(req.body,(error,result)=>{
+            if(error)
+            {
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                //console(result)
+                return res.status(200).json({
+                    status : 1,
+                    message : result
+                });
+            }
+        });
+    },
+    UserCompletionCount : (req,res)=>{
+        getUserCompletionCount(req.body,(error,result)=>{
+            if(error)
+            {
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : result[0].c
+                });
+            }
+        });
+    },
+    UserCompletionRequest : (req,res)=>{
+        getUserCompletionRequest(req.body,(error,result)=>{
+            if(error)
+            {
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : result
+                });
+            }
+        });
     },
 };
