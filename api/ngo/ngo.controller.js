@@ -1,6 +1,6 @@
 const {sign} = require("jsonwebtoken");
 
-const {getNgoByNgoEmail,addVolunteer,viewVolunteer,checkRepeatAadharVounteer,checkRepeatEmailVounteer,checkRepeatMobileVounteer,updatevolunteerDetails,addNewReward,checkForRepeatRewardTag,checkForRepeatRewardDesc,checkForRepeatRewardMinPoint,getFeed,getAllUserRequestPending,getAllUserRequestCompleted,setCompleteUserRequest} = require("./ngo.service");
+const {getNgoByNgoEmail,addVolunteer,viewVolunteer,checkRepeatAadharVounteer,checkRepeatEmailVounteer,checkRepeatMobileVounteer,updatevolunteerDetails,addNewReward,checkForRepeatRewardTag,checkForRepeatRewardDesc,checkForRepeatRewardMinPoint,getFeed,getAllUserRequestPending,getAllUserRequestCompleted,setCompleteUserRequest,listVolunteerGroup,addVolunteerGroup,uniqueGroupName,updateVolunteerGroupDetails} = require("./ngo.service");
 
 module.exports = {
     login: (req,res)=>{
@@ -127,7 +127,7 @@ module.exports = {
             else{
                 return res.status(200).json({
                     status : 1,
-                    message : result[0]
+                    message : result
                 });
             }
         });
@@ -328,7 +328,37 @@ module.exports = {
         })
     },
     completeUserRequest:(req,res)=>{
+        let reward = req.body.actualWeight*50
+        req.body['reward']=reward
         setCompleteUserRequest(req.body,(error,result)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                setUserRewardPoints(req.body,(error,result)=>{
+                    if(error){
+                        console.log(error);
+                        return res.status(500).json({
+                            status : 0,
+                            invalidResponseServer : "Database Connection Error"
+                        });
+                    }
+                    else{
+                        return res.status(200).json({
+                            status : 1,
+                            message : "Done"
+                        });
+                    }
+                })
+            }
+        })
+    },
+    showVolunteerGroups:(req,res)=>{
+        listVolunteerGroup((error,result)=>{
             if(error){
                 console.log(error);
                 return res.status(500).json({
@@ -341,6 +371,78 @@ module.exports = {
                     status : 1,
                     message : result
                 });
+            }
+        })
+    },
+    newVolunteerGroup:(req,res)=>{
+        uniqueGroupName(req.body,(error,result)=>{
+            if(error)
+            {
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else if(result.c>0)
+            {
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponse : "Group Name Already Exists"
+                });
+            }
+            else{
+                addVolunteerGroup(req.body,(error,result)=>{
+                    if(error){
+                        console.log(error);
+                        return res.status(500).json({
+                            status : 0,
+                            invalidResponseServer : "Database Connection Error"
+                        });
+                    }
+                    else{
+                        return res.status(200).json({
+                            status : 1,
+                            message : result
+                        });
+                    }
+                })
+            }
+        })
+    },
+    updateExistingVolunteerGroup:(req,res)=>{
+        uniqueGroupName(req.body,(error,result)=>{
+            if(error)
+            {
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else if(result.c>0)
+            {
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponse : "Group Name Already Exists"
+                });
+            }
+            else{
+                updateVolunteerGroupDetails(req.body,(error,result)=>{
+                    if(error){
+                        console.log(error);
+                        return res.status(500).json({
+                            status : 0,
+                            invalidResponseServer : "Database Connection Error"
+                        });
+                    }
+                    else{
+                        return res.status(200).json({
+                            status : 1,
+                            message : result
+                        });
+                    }
+                })
             }
         })
     },

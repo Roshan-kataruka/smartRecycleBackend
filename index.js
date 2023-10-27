@@ -13,6 +13,8 @@ const ngoRouter = require("./api/ngo/ngo.router");
 
 const imageRouter = require("./api/ImageRecognition/imageRecogRouter")
 
+const Notification = require("./api/Notification/Notification.router")
+
 app.use(express.json());
 
 app.use("/api/users",userRouter);
@@ -20,6 +22,8 @@ app.use("/api/users",userRouter);
 app.use("/api/ngo",ngoRouter);
 
 app.use("/image/api",imageRouter);
+
+app.use("/send/sms",Notification);
 
 
 

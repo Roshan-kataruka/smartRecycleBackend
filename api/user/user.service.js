@@ -343,7 +343,7 @@ module.exports = {
         })
     },
     getUserPendingRequest:(data,callback)=>{
-        db.query("select ApproxWeight,TimeStamp,Type,PickUpDate from Request where Status=? and UserID=?;",[
+        db.query("select ApproxWeight,TimeStamp,Type,PickUpDate from Request where Status=? and UserID=? order by PickUpDate desc;",[
             "Assigned",
             data.UserID
         ],(error,result)=>{
@@ -355,7 +355,7 @@ module.exports = {
         })
     },
     getUserCompletionCount:(data,callback)=>{
-        db.query("select count(*) as 'c' from Request where Status=? and UserID=?;",[
+        db.query("select count(*) as 'c' from Request where Status=? and UserID=? order by PickUpDate desc;",[
             "Completed",
             data.UserID
         ],(error,result)=>{

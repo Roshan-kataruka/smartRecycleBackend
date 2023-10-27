@@ -39,7 +39,7 @@ module.exports = {
         });
     },
     viewVolunteer : (callback)=>{
-        db.query("select * from Volunteer",[],(error,result)=>{
+        db.query("select VID,VName,Age,Gender,State,City,Pin,MobileNo,Email,AadharNo,GroupName from Volunteer inner join Volunteer_Group;",(error,result)=>{
             if(error)
             {
                 callback(error);
@@ -301,6 +301,101 @@ module.exports = {
                 return callback(null,result);
             }
         })
-        //update Request set Status = "Completed", ActualWeight=100 where RequestID=2
     },
+    setUserRewardPoints:(data,callback)=>{
+        db.query("update User_Credit set CreditValue = ? where UserID=?;",
+        [
+           data.reward,
+           data.UserID
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    listVolunteerGroup:(callback)=>{
+        db.query("select GID,GroupName from Volunteer_Group;",
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    addVolunteerGroup:(data,callback)=>{
+        db.query("INSERT INTO `Volunteer_Group` (`GroupName`, `NgoID`, `Latitude`, `Longitude`, `AreaCovered`) VALUES (%s, %s, %s, %s, %s);",
+        [
+           data.GroupName,
+           data.NgoID,
+           data.Latitude,
+           data.Longitude,
+           data.AreaCovered
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    uniqueGroupName:(data,callback)=>{
+        db.query("select count(*) as 'c' from Volunteer_Group where GroupName=? ;",
+        [
+           data.GroupName,
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    getDetailsByVolunteerGroupId:(data,callback)=>{
+        db.query("select GroupName,Latitude,Longitude,AreaCovered from Volunteer_Group  where GID=? ;",
+        [
+           data.GID,
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    updateVolunteerGroupDetails:(data,callback)=>{
+        db.query("update Volunteer_Group set GroupName=? ,Latitude=? ,Longitude=? ,AreaCovered=? where GID=? ;",
+        [
+           data.GroupName,
+           data.Latitude,
+           data.Longitude,
+           data.AreaCovered,
+           data.GID
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    }
 };
