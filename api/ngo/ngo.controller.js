@@ -27,7 +27,7 @@ module.exports = {
             {
                 result.NgoEmail=undefined;
                 const jsontoken = sign({results: result},"qs45dex",
-                {expiresIn: "30D" });
+                {expiresIn: "30d" });
                 return res.json({
                     success:1,
                     message:"Login Successfully",
