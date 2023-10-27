@@ -1,6 +1,6 @@
 const {sign} = require("jsonwebtoken");
 
-const {getNgoByNgoEmail,addVolunteer,viewVolunteer,checkRepeatAadharVounteer,checkRepeatEmailVounteer,checkRepeatMobileVounteer,updatevolunteerDetails,addNewReward,checkForRepeatRewardTag,checkForRepeatRewardDesc,checkForRepeatRewardMinPoint,getFeed,getAllUserRequestPending,getAllUserRequestCompleted,setCompleteUserRequest,listVolunteerGroup,addVolunteerGroup,uniqueGroupName,updateVolunteerGroupDetails} = require("./ngo.service");
+const {getNgoByNgoEmail,addVolunteer,viewVolunteer,checkRepeatAadharVounteer,checkRepeatEmailVounteer,checkRepeatMobileVounteer,updatevolunteerDetails,addNewReward,checkForRepeatRewardTag,checkForRepeatRewardDesc,checkForRepeatRewardMinPoint,getFeed,getAllUserRequestPending,getAllUserRequestCompleted,setCompleteUserRequest,listVolunteerGroup,addVolunteerGroup,uniqueGroupName,updateVolunteerGroupDetails,getTotalVolunteersCount,getTotalVolunteersGroupCount,getPendingRequestCount,getCompletedRequestCount,updateFeedDisplay} = require("./ngo.service");
 
 module.exports = {
     login: (req,res)=>{
@@ -295,7 +295,7 @@ module.exports = {
         })
     },
     userRequestPending:(req,res)=>{
-        getAllUserRequestPending(req.body,(error,result)=>{
+        getAllUserRequestPending((error,result)=>{
             if(error){
                 console.log(error);
                 return res.status(500).json({
@@ -312,7 +312,7 @@ module.exports = {
         })
     },
     userRequestCompleted:(req,res)=>{
-        getAllUserRequestCompleted(req.body,(error,result)=>{
+        getAllUserRequestCompleted((error,result)=>{
             if(error){
                 console.log(error);
                 return res.status(500).json({
@@ -447,4 +447,89 @@ module.exports = {
             }
         })
     },
+    getVolunteerCount:(req,res)=>{
+        getTotalVolunteersCount((error,result)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : result[0].c
+                });
+            }
+        })
+    },
+    getVolunteerGroupCount:(req,res)=>{
+        getTotalVolunteersGroupCount((error,result)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : result[0].c
+                });
+            }
+        })
+    },
+    pendingRequestCount:(req,res)=>{
+        getPendingRequestCount((error,result)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : result[0].c
+                });
+            }
+        })
+    },
+    completedRequestCount:(req,res)=>{
+        getCompletedRequestCount((error,result)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : result[0].c
+                });
+            }
+        })
+    },
+    alterFeedDisplay:(req,res)=>{
+        updateFeedDisplay(req.body,(error,result)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : result.affectedRows
+                });
+            }
+        })
+    }
 };

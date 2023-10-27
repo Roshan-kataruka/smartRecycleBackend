@@ -259,6 +259,21 @@ module.exports = {
             }
         })
     },
+    updateFeedDisplay:(data,callback)=>{
+        db.query("update Feed set FeedEnable=? where FID=? ",[
+            data.FeedEnable,
+            data.FID
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
     getAllUserRequestPending:(callback)=>{
         db.query("select * from Request where Status=?;",
         ["Assigned"],
@@ -397,5 +412,59 @@ module.exports = {
                 return callback(null,result);
             }
         })
-    }
+    },
+    getTotalVolunteersCount:(callback)=>{
+        db.query("select count(*) as c from Volunteer;",
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    getTotalVolunteersGroupCount:(callback)=>{
+        db.query("select count(*) as c from Volunteer_Group;",
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    getPendingRequestCount:(callback)=>{
+        db.query("select count(*) as 'c' from Request where Status=? ;",
+        [
+            "Assigned"
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    getCompletedRequestCount:(callback)=>{
+        db.query("select count(*) as 'c' from Request where Status=? ;",
+        [
+            "Completed"
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
 };

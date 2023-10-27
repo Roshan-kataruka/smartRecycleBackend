@@ -10,7 +10,7 @@ const {sendToTopic} = require('./Notification.service');
 module.exports = {
   sendMessage: async (req, res) => {
     try {
-      const topic = 'smartrecycle';
+      const topic = "smartrecycle";
       const { title, body, image } = req.body;
 
       const result = await sendToTopic(topic, title, body, image);
