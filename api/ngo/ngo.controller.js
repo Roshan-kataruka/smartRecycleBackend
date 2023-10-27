@@ -133,7 +133,8 @@ module.exports = {
         });
     },
     updateExistingVolunteer:(req,res)=>{
-        checkRepeatEmailVounteer(body.Email,(error,result)=>{
+        checkRepeatEmailVounteer(req.body.Email,(error,result)=>{
+            //console.log(result)
             if(error){
                 console.log(error);
                 return res.status(500).json({
@@ -141,7 +142,7 @@ module.exports = {
                     invalidResponseServer : "Database Connection Error"
                 });
             }
-            else if(result.c>1)
+            else if(result[0].c==1)
             {
                 return res.status(500).json({
                     status : 0,
@@ -149,7 +150,7 @@ module.exports = {
                 });
             }
             else{
-                checkRepeatAadharVounteer(body.AadharNo,(error,result)=>{
+                checkRepeatAadharVounteer(req.body.AadharNo,(error,result)=>{
                     if(error){
                         console.log(error);
                         return res.status(500).json({
@@ -157,7 +158,7 @@ module.exports = {
                             invalidResponseServer : "Database Connection Error"
                         });
                     }
-                    else if(result.c>1)
+                    else if(result[0].c==1)
                     {
                         return res.status(500).json({
                             status : 0,
@@ -165,7 +166,7 @@ module.exports = {
                         });
                     }
                     else{
-                        checkRepeatMobileVounteer(body.MobileNumber,(error,result)=>{
+                        checkRepeatMobileVounteer(req.body.MobileNo,(error,result)=>{
                             if(error){
                                 console.log(error);
                                 return res.status(500).json({
@@ -173,7 +174,7 @@ module.exports = {
                                     invalidResponseServer : "Database Connection Error"
                                 });
                             }
-                            else if(result.c>1)
+                            else if(result[0].c==1)
                             {
                                 return res.status(500).json({
                                     status : 0,
@@ -181,7 +182,7 @@ module.exports = {
                                 });
                             }
                             else{
-                                updatevolunteerDetails(body,(error,result)=>{
+                                updatevolunteerDetails(req.body,(error,result)=>{
                                     if(error){
                                         console.log(error);
                                         return res.status(500).json({
@@ -192,7 +193,7 @@ module.exports = {
                                     else{
                                         return res.status(200).json({
                                             status : 1,
-                                            message : result
+                                            message : result.affectedRows
                                         });
                                     }
                                 })
