@@ -31,9 +31,9 @@ router.get("/volunteer/count",checktoken,getVolunteerCount)
 
 router.get("/volunteergroup/count",checktoken,getVolunteerGroupCount)
 
-router.get("request/pendingcount",checktoken,pendingRequestCount)
+router.get("/request/pendingcount",checktoken,pendingRequestCount)
 
-router.get("request/completedcount",checktoken,completedRequestCount)
+router.get("/request/completedcount",checktoken,completedRequestCount)
 
 
 //router.post("/feed",addFeed); //update feed 
