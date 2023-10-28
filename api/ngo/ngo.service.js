@@ -39,7 +39,7 @@ module.exports = {
         });
     },
     viewVolunteer : (callback)=>{
-        db.query("select VID,VName,Age,Gender,State,City,Pin,MobileNo,Email,AadharNo,GroupName from Volunteer inner join Volunteer_Group;",(error,result)=>{
+        db.query("select VID,VName,Age,Gender,State,City,Pin,MobileNo,Email,AadharNo,GroupName from Volunteer inner join Volunteer_Group on Volunteer.GroupID=Volunteer_Group.GID;",(error,result)=>{
             if(error)
             {
                 callback(error);
@@ -275,7 +275,7 @@ module.exports = {
         })
     },
     getAllUserRequestPending:(callback)=>{
-        db.query("select * from Request where Status=?;",
+        db.query("select RequestID,ApproxWeight,TimeStamp,Type,Request.Latitude,Request.Longitude,PickUpDate,User.UserID,User.FirstName,User.LastName,User_Login.LoginEmail,Volunteer_Group.GroupName from Request inner join User on Request.UserID=User.UserID inner join Volunteer_Group on Request.VolunteerGroupID=Volunteer_Group.GID inner join User_Login on User.UserID=User_Login.UserID where Request.Status=? ;",
         ["Assigned"],
         (error,result)=>{
             if(error)
@@ -288,7 +288,7 @@ module.exports = {
         })
     },
     getAllUserRequestCompleted:(callback)=>{
-        db.query("select * from Request where Status=?;",[
+        db.query("select RequestID,ApproxWeight,TimeStamp,Type,Request.Latitude,Request.Longitude,PickUpDate,Request.ActualWeight,User.FirstName,User.LastName,User_Login.LoginEmail,Volunteer_Group.GroupName from Request inner join User on Request.UserID=User.UserID inner join Volunteer_Group on Request.VolunteerGroupID=Volunteer_Group.GID inner join User_Login on User.UserID=User_Login.UserID where Request.Status=? ;",[
         "Completed"],
         (error,result)=>{
             if(error)
