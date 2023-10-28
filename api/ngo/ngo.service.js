@@ -467,4 +467,16 @@ module.exports = {
             }
         })
     },
+    getVolunteerGroupNameWithId:(callback)=>{
+        db.query("select GID,GroupName from Volunteer_Group ;",
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
 };

@@ -1,6 +1,6 @@
 const {sign} = require("jsonwebtoken");
 
-const {getNgoByNgoEmail,addVolunteer,viewVolunteer,checkRepeatAadharVounteer,checkRepeatEmailVounteer,checkRepeatMobileVounteer,updatevolunteerDetails,addNewReward,checkForRepeatRewardTag,checkForRepeatRewardDesc,checkForRepeatRewardMinPoint,getFeed,getAllUserRequestPending,getAllUserRequestCompleted,setCompleteUserRequest,listVolunteerGroup,addVolunteerGroup,uniqueGroupName,updateVolunteerGroupDetails,getTotalVolunteersCount,getTotalVolunteersGroupCount,getPendingRequestCount,getCompletedRequestCount,updateFeedDisplay} = require("./ngo.service");
+const {getNgoByNgoEmail,addVolunteer,viewVolunteer,checkRepeatAadharVounteer,checkRepeatEmailVounteer,checkRepeatMobileVounteer,updatevolunteerDetails,addNewReward,checkForRepeatRewardTag,checkForRepeatRewardDesc,checkForRepeatRewardMinPoint,getFeed,getAllUserRequestPending,getAllUserRequestCompleted,setCompleteUserRequest,listVolunteerGroup,addVolunteerGroup,uniqueGroupName,updateVolunteerGroupDetails,getTotalVolunteersCount,getTotalVolunteersGroupCount,getPendingRequestCount,getCompletedRequestCount,updateFeedDisplay,getVolunteerGroupNameWithId} = require("./ngo.service");
 
 module.exports = {
     login: (req,res)=>{
@@ -142,7 +142,7 @@ module.exports = {
                     invalidResponseServer : "Database Connection Error"
                 });
             }
-            else if(result[0].c==1)
+            else if(result[0].c>1)
             {
                 return res.status(500).json({
                     status : 0,
@@ -158,7 +158,7 @@ module.exports = {
                             invalidResponseServer : "Database Connection Error"
                         });
                     }
-                    else if(result[0].c==1)
+                    else if(result[0].c>1)
                     {
                         return res.status(500).json({
                             status : 0,
@@ -174,7 +174,7 @@ module.exports = {
                                     invalidResponseServer : "Database Connection Error"
                                 });
                             }
-                            else if(result[0].c==1)
+                            else if(result[0].c>1)
                             {
                                 return res.status(500).json({
                                     status : 0,
@@ -531,5 +531,22 @@ module.exports = {
                 });
             }
         })
-    }
+    },
+    volunteerGroupNameWithId:(req,res)=>{
+        getVolunteerGroupNameWithId((error,result)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : result
+                });
+            }
+        })
+    },
 };

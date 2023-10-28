@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const {login,addNewVolunteer,listVolunteer,updateExistingVolunteer,addReward,getAllFeed,userRequestPending, userRequestCompleted,completeUserRequest,showVolunteerGroups,newVolunteerGroup,updateExistingVolunteerGroup,getVolunteerCount,getVolunteerGroupCount,pendingRequestCount,completedRequestCount,alterFeedDisplay} = require("./ngo.controller");
+const {login,addNewVolunteer,listVolunteer,updateExistingVolunteer,addReward,getAllFeed,userRequestPending, userRequestCompleted,completeUserRequest,showVolunteerGroups,newVolunteerGroup,updateExistingVolunteerGroup,getVolunteerCount,getVolunteerGroupCount,pendingRequestCount,completedRequestCount,alterFeedDisplay,volunteerGroupNameWithId} = require("./ngo.controller");
 
 const {checktoken} = require("../../auth/token_validation_NGO");
 const { route } = require("./ngo.router");
@@ -34,6 +34,8 @@ router.get("/volunteergroup/count",checktoken,getVolunteerGroupCount)
 router.get("/request/pendingcount",checktoken,pendingRequestCount)
 
 router.get("/request/completedcount",checktoken,completedRequestCount)
+
+router.get("/groupname/id",checktoken,volunteerGroupNameWithId)
 
 
 //router.post("/feed",addFeed); //update feed 
