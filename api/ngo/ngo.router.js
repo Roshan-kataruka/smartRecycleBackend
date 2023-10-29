@@ -15,7 +15,7 @@ router.patch("/",checktoken,updateExistingVolunteer);
 
 router.post("/reward",checktoken,addReward);
 
-router.get("/request/pendingdetails",checktoken,userRequestPending);
+router.post("/request/pendingdetails",checktoken,userRequestPending);
 
 router.get("/request/completeddetails",checktoken,userRequestCompleted);
 

@@ -295,7 +295,7 @@ module.exports = {
         })
     },
     userRequestPending:(req,res)=>{
-        getAllUserRequestPending((error,result)=>{
+        getAllUserRequestPending(req.body,(error,result)=>{
             if(error){
                 console.log(error);
                 return res.status(500).json({

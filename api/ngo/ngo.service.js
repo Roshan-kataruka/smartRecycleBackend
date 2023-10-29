@@ -274,9 +274,11 @@ module.exports = {
             }
         })
     },
-    getAllUserRequestPending:(callback)=>{
-        db.query("select RequestID,ApproxWeight,TimeStamp,Type,Request.Latitude,Request.Longitude,PickUpDate,User.UserID,User.FirstName,User.LastName,User_Login.LoginEmail,Volunteer_Group.GroupName from Request inner join User on Request.UserID=User.UserID inner join Volunteer_Group on Request.VolunteerGroupID=Volunteer_Group.GID inner join User_Login on User.UserID=User_Login.UserID where Request.Status=? ;",
-        ["Assigned"],
+    getAllUserRequestPending:(data,callback)=>{
+        db.query("select RequestID,ApproxWeight,TimeStamp,Type,Request.Latitude,Request.Longitude,PickUpDate,User.UserID,User.FirstName,User.LastName,User_Login.LoginEmail,Volunteer_Group.GroupName from Request inner join User on Request.UserID=User.UserID inner join Volunteer_Group on Request.VolunteerGroupID=Volunteer_Group.GID inner join User_Login on User.UserID=User_Login.UserID where Request.Status=? and Volunteer_Group.GroupName=? ;",
+        ["Assigned",
+        data.GroupName
+        ],
         (error,result)=>{
             if(error)
             {
