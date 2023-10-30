@@ -1,6 +1,6 @@
 const {sign} = require("jsonwebtoken");
 
-const {getNgoByNgoEmail,addVolunteer,viewVolunteer,checkRepeatAadharVounteer,checkRepeatEmailVounteer,checkRepeatMobileVounteer,updatevolunteerDetails,addNewReward,checkForRepeatRewardTag,checkForRepeatRewardDesc,checkForRepeatRewardMinPoint,getFeed,getAllUserRequestPending,getAllUserRequestCompleted,setCompleteUserRequest,setUserRewardPoints,listVolunteerGroup,addVolunteerGroup,uniqueGroupName,updateVolunteerGroupDetails,getTotalVolunteersCount,getTotalVolunteersGroupCount,getPendingRequestCount,getCompletedRequestCount,updateFeedDisplay,getVolunteerGroupNameWithId} = require("./ngo.service");
+const {getNgoByNgoEmail,addVolunteer,viewVolunteer,checkRepeatAadharVounteer,checkRepeatEmailVounteer,checkRepeatMobileVounteer,updatevolunteerDetails,addNewReward,checkForRepeatRewardTag,checkForRepeatRewardDesc,checkForRepeatRewardMinPoint,getFeed,getAllUserRequestPending,getAllUserRequestCompleted,setCompleteUserRequest,setUserRewardPoints,listVolunteerGroup,addVolunteerGroup,uniqueGroupName,updateVolunteerGroupDetails,getTotalVolunteersCount,getTotalVolunteersGroupCount,getPendingRequestCount,getCompletedRequestCount,updateFeedDisplay,getVolunteerGroupNameWithId,getUserSpecificRewardPoints,viewAllRewardDetails,removeRewardDetails,updateRewardDetails,deleteVolunteer} = require("./ngo.service");
 
 module.exports = {
     login: (req,res)=>{
@@ -53,7 +53,7 @@ module.exports = {
                     invalidResponseServer : "Database Connection Error"
                 });
             }
-            else if(result.c>=1)
+            else if(result[0].c>=1)
             {
                 return res.status(500).json({
                     status : 0,
@@ -69,7 +69,7 @@ module.exports = {
                             invalidResponseServer : "Database Connection Error"
                         });
                     }
-                    else if(result.c>=1)
+                    else if(result[0].c>=1)
                     {
                         return res.status(500).json({
                             status : 0,
@@ -85,7 +85,7 @@ module.exports = {
                                     invalidResponseServer : "Database Connection Error"
                                 });
                             }
-                            else if(result.c>=1)
+                            else if(result[0].c>=1)
                             {
                                 return res.status(500).json({
                                     status : 0,
@@ -104,7 +104,7 @@ module.exports = {
                                     else{
                                         return res.status(200).json({
                                             status : 1,
-                                            message : result
+                                            message : 1
                                         });
                                     }
                                 })
@@ -214,7 +214,7 @@ module.exports = {
                     invalidResponseServer : "Database Connection Error"
                 });
             }
-            else if(result.c>=1)
+            else if(result[0].c>=1)
             {
                 return res.status(500).json({
                     status : 0,
@@ -230,7 +230,7 @@ module.exports = {
                             invalidResponseServer : "Database Connection Error"
                         });
                     }
-                    else if(result.c>=1)
+                    else if(result[0].c>=1)
                     {
                         return res.status(500).json({
                             status : 0,
@@ -246,7 +246,7 @@ module.exports = {
                                     invalidResponseServer : "Database Connection Error"
                                 });
                             }
-                            else if(result.c>=1)
+                            else if(result[0].c>=1)
                             {
                                 return res.status(500).json({
                                     status : 0,
@@ -265,7 +265,7 @@ module.exports = {
                                     else{
                                         return res.status(200).json({
                                             status : 1,
-                                            message : result
+                                            message : result.affectedRows
                                         });
                                     }
                                 })
@@ -329,7 +329,17 @@ module.exports = {
         })
     },
     completeUserRequest:(req,res)=>{
-        let reward = req.body.actualWeight*50
+        getUserSpecificRewardPoints(req.body,(error,result)=>{
+            if(error)
+            {
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            let reward = result[0].c
+            console.log(reward)
+            reward += req.body.actualWeight*50
         req.body['reward']=reward
         setCompleteUserRequest(req.body,(error,result)=>{
             if(error){
@@ -356,6 +366,7 @@ module.exports = {
                     }
                 })
             }
+        })
         })
     },
     showVolunteerGroups:(req,res)=>{
@@ -549,4 +560,127 @@ module.exports = {
             }
         })
     },
+    listRewardsDetails:(req,res)=>{
+        viewAllRewardDetails((err,result)=>{
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : result
+                });
+            }
+        })
+    },
+    rewardDetailsRemoval:(req,res)=>{
+        removeRewardDetails(req.body,(err,result)=>{
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : "Done"
+                });
+            }
+        })
+    },
+    rewardDetailsUpdation:(req,res)=>{
+        let body = req.body
+        checkForRepeatRewardTag(body.RewardTag,(error,result)=>{
+            if(error){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else if(result[0].c>1)
+            {
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponse : "Tagline already Exists"
+                });
+            }
+            else{
+                checkForRepeatRewardDesc(body.Description,(error,result)=>{
+                    if(error){
+                        console.log(error);
+                        return res.status(500).json({
+                            status : 0,
+                            invalidResponseServer : "Database Connection Error"
+                        });
+                    }
+                    else if(result[0].c>1)
+                    {
+                        return res.status(500).json({
+                            status : 0,
+                            invalidResponse : "Description Already Exists"
+                        });
+                    }
+                    else{
+                        checkForRepeatRewardMinPoint(body.MinPoints,(error,result)=>{
+                            if(error){
+                                console.log(error);
+                                return res.status(500).json({
+                                    status : 0,
+                                    invalidResponseServer : "Database Connection Error"
+                                });
+                            }
+                            else if(result[0].c>1)
+                            {
+                                return res.status(500).json({
+                                    status : 0,
+                                    invalidResponse : "Minimum Point Already Exists"
+                                });
+                            }
+                            else{
+                                updateRewardDetails(body,(error,result)=>{
+                                    if(error){
+                                        console.log(error);
+                                        return res.status(500).json({
+                                            status : 0,
+                                            invalidResponseServer : "Database Connection Error"
+                                        });
+                                    }
+                                    else{
+                                        return res.status(200).json({
+                                            status : 1,
+                                            message : result.affectedRows
+                                        });
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        });
+    },
+    commandDeleteVolunteer:(req,res)=>{
+        deleteVolunteer(req.body.VID,(err,result)=>{
+            if(err){
+                console.log(error);
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : 1
+                });
+            }
+        })
+    }
 };

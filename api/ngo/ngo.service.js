@@ -35,7 +35,7 @@ module.exports = {
             {
                 callback(error);
             }
-            return callback(null,results[0]);
+            return callback(null,results);
         });
     },
     viewVolunteer : (callback)=>{
@@ -481,4 +481,79 @@ module.exports = {
             }
         })
     },
+    getUserSpecificRewardPoints:(data,callback)=>{
+        db.query("select CreditValue as 'c' from User_Credit where UserID=? ;",
+        [
+            data.UserID
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    viewAllRewardDetails:(callback)=>{
+        db.query("select * from Reward ;",
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    removeRewardDetails:(data,callback)=>{
+        db.query("delete from Reward where RID=? ;",
+        [
+            data.RID
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    updateRewardDetails:(data,callback)=>{
+        db.query("update Reward set RewardTag=?,Description=?,MinPoints=? where RID=? ;",
+        [
+            data.RewardTag,
+            data.Description,
+            data.MinPoints,
+            data.RID
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
+    deleteVolunteer:(data,callback)=>{
+        db.query("delete from Volunteer where VID=? ;",
+        [
+            data
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    }
 };
