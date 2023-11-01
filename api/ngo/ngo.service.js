@@ -18,7 +18,7 @@ module.exports = {
         );
     },
     addVolunteer : (data,callback)=>{
-        db.query("INSERT INTO Volunteer (VName, Age, Gender, NgoID, State, City, Pin, MobileNo, Email, AadharNo,GroupID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",[
+        db.query("INSERT INTO Volunteer (VName, Age, Gender, NgoID, State, City, Pin, MobileNo, Email, AadharNo,GroupID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?);",[
             data.VName,
             data.Age,
             data.Gender,
