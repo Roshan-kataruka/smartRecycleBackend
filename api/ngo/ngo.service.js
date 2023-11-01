@@ -555,5 +555,17 @@ module.exports = {
                 return callback(null,result);
             }
         })
+    },
+    CompleteVolunteerGroups:(callback)=>{
+        db.query("select * from Volunteer_Group ;",
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
     }
 };

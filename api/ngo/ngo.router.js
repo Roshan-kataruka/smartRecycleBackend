@@ -1,9 +1,8 @@
 const router = require("express").Router();
 
-const {login,addNewVolunteer,listVolunteer,updateExistingVolunteer,addReward,getAllFeed,userRequestPending, userRequestCompleted,completeUserRequest,showVolunteerGroups,newVolunteerGroup,updateExistingVolunteerGroup,getVolunteerCount,getVolunteerGroupCount,pendingRequestCount,completedRequestCount,alterFeedDisplay,volunteerGroupNameWithId,listRewardsDetails,rewardDetailsRemoval,rewardDetailsUpdation,commandDeleteVolunteer} = require("./ngo.controller");
+const {login,addNewVolunteer,listVolunteer,updateExistingVolunteer,addReward,getAllFeed,userRequestPending, userRequestCompleted,completeUserRequest,showVolunteerGroups,newVolunteerGroup,updateExistingVolunteerGroup,getVolunteerCount,getVolunteerGroupCount,pendingRequestCount,completedRequestCount,alterFeedDisplay,volunteerGroupNameWithId,listRewardsDetails,rewardDetailsRemoval,rewardDetailsUpdation,commandDeleteVolunteer,showCompleteVolunteerGroups} = require("./ngo.controller");
 
 const {checktoken} = require("../../auth/token_validation_NGO");
-const { route } = require("./ngo.router");
 
 router.post("/login",login);
 
@@ -31,6 +30,8 @@ router.patch("/request/update",checktoken,completeUserRequest)
 
 router.get("/volunteergroup",checktoken,showVolunteerGroups)
 
+router.get("/details/volunteergroup",checktoken,showCompleteVolunteerGroups)
+
 router.post("/add/volunteergroup",checktoken,newVolunteerGroup)
 
 router.patch("/update",checktoken,updateExistingVolunteerGroup)
@@ -45,14 +46,10 @@ router.get("/request/completedcount",checktoken,completedRequestCount)
 
 router.get("/groupname/id",checktoken,volunteerGroupNameWithId)
 
-
 //router.post("/feed",addFeed); //update feed 
 
 router.get("/feeddetails",checktoken,getAllFeed);
 
 router.patch("/feed/update",checktoken,alterFeedDisplay);
-
-
-
 
 module.exports = router;
