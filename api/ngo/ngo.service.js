@@ -348,7 +348,7 @@ module.exports = {
         })
     },
     addVolunteerGroup:(data,callback)=>{
-        db.query("INSERT INTO `Volunteer_Group` (`GroupName`, `NgoID`, `Latitude`, `Longitude`, `AreaCovered`) VALUES (%s, %s, %s, %s, %s);",
+        db.query("INSERT INTO `Volunteer_Group` (`GroupName`, `NgoID`, `Latitude`, `Longitude`, `AreaCovered`) VALUES (?, ?, ?, ?, ?);",
         [
            data.GroupName,
            data.NgoID,
