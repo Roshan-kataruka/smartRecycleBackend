@@ -567,5 +567,20 @@ module.exports = {
                 return callback(null,result);
             }
         })
-    }
+    },
+    volunteerGroupDelete:(data,callback)=>{
+        db.query("delete from Volunteer_Group where GID=? ;",
+        [
+            data.GID
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    },
 };
