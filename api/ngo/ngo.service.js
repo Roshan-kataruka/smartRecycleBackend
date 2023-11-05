@@ -248,8 +248,8 @@ module.exports = {
             }
         })
     },
-    getFeed:(callback)=>{
-        db.query("select * from Feed;",(error,result)=>{
+    getFeed:(data,callback)=>{
+        db.query("select * from Feed where FeedEnable=0 and NgoID=? ;",[data.NgoID],(error,result)=>{
             if(error)
             {
                 callback(error);
@@ -260,9 +260,10 @@ module.exports = {
         })
     },
     updateFeedDisplay:(data,callback)=>{
-        db.query("update Feed set FeedEnable=? where FID=? ",[
+        db.query("update Feed set FeedEnable=? where FID=? and NgoID=? ;",[
             data.FeedEnable,
-            data.FID
+            data.FID,
+            data.NgoID
         ],
         (error,result)=>{
             if(error)
@@ -583,4 +584,23 @@ module.exports = {
             }
         })
     },
+    insertIntoFeed:(data,callback)=>{
+        db.query("INSERT INTO Feed (Title, Description, NgoID, FeedImg, FeedEnable) VALUES (?, ?, ?, ?, ?) ;",
+        [
+            data.Title,
+            data.Description,
+            data.NgoID,
+            data.FeedImg,
+            1
+        ],
+        (error,result)=>{
+            if(error)
+            {
+                callback(error);
+            }
+            else{
+                return callback(null,result);
+            }
+        })
+    }
 };

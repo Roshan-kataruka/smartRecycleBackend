@@ -88,7 +88,7 @@ exports.analyzeImage = async (req, res) => {
     //console.log(response.length);
     for(let i=0; i<response.length;i++)
     {
-        if(i==5)
+        if(i==15)
         {
             break;
         }

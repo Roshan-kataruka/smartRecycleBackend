@@ -1,6 +1,6 @@
 const {sign} = require("jsonwebtoken");
 
-const {getNgoByNgoEmail,addVolunteer,viewVolunteer,checkRepeatAadharVounteer,checkRepeatEmailVounteer,checkRepeatMobileVounteer,updatevolunteerDetails,addNewReward,checkForRepeatRewardTag,checkForRepeatRewardDesc,checkForRepeatRewardMinPoint,getFeed,getAllUserRequestPending,getAllUserRequestCompleted,setCompleteUserRequest,setUserRewardPoints,listVolunteerGroup,addVolunteerGroup,uniqueGroupName,updateVolunteerGroupDetails,getTotalVolunteersCount,getTotalVolunteersGroupCount,getPendingRequestCount,getCompletedRequestCount,updateFeedDisplay,getVolunteerGroupNameWithId,getUserSpecificRewardPoints,viewAllRewardDetails,removeRewardDetails,updateRewardDetails,deleteVolunteer,CompleteVolunteerGroups,volunteerGroupDelete} = require("./ngo.service");
+const {getNgoByNgoEmail,addVolunteer,viewVolunteer,checkRepeatAadharVounteer,checkRepeatEmailVounteer,checkRepeatMobileVounteer,updatevolunteerDetails,addNewReward,checkForRepeatRewardTag,checkForRepeatRewardDesc,checkForRepeatRewardMinPoint,getFeed,getAllUserRequestPending,getAllUserRequestCompleted,setCompleteUserRequest,setUserRewardPoints,listVolunteerGroup,addVolunteerGroup,uniqueGroupName,updateVolunteerGroupDetails,getTotalVolunteersCount,getTotalVolunteersGroupCount,getPendingRequestCount,getCompletedRequestCount,updateFeedDisplay,getVolunteerGroupNameWithId,getUserSpecificRewardPoints,viewAllRewardDetails,removeRewardDetails,updateRewardDetails,deleteVolunteer,CompleteVolunteerGroups,volunteerGroupDelete,insertIntoFeed} = require("./ngo.service");
 
 module.exports = {
     login: (req,res)=>{
@@ -510,7 +510,7 @@ module.exports = {
         })
     },
     completedRequestCount:(req,res)=>{
-        getCompletedRequestCount((error,result)=>{
+        getCompletedRequestCount(req.body,(error,result)=>{
             if(error){
                 console.log(error);
                 return res.status(500).json({
@@ -713,6 +713,23 @@ module.exports = {
                 return res.status(200).json({
                     status : 1,
                     message : "Successfully deleted"
+                });
+            }
+        })
+    },
+    addFeedDetails:(req,res)=>{
+        insertIntoFeed(req.body,(err,result)=>{
+            if(err)
+            {
+                return res.status(500).json({
+                    status : 0,
+                    invalidResponseServer : "Database Connection Error"
+                });
+            }
+            else{
+                return res.status(200).json({
+                    status : 1,
+                    message : "Successfully added"
                 });
             }
         })
